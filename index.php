@@ -16,7 +16,7 @@
           <li>PHP-POO & MYSQL</li>
         </ul>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-          <a href="inscription.php"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Se connecter</button></a> 
+          <a href="authentification.php"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Se connecter</button></a> 
           <a href="inscription.php"><button type="button" class="btn btn-success btn-lg px-4 me-md-2 fw-bold"> S'inscrire</button></a> 
         </div>
       </div>
