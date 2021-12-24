@@ -4,7 +4,7 @@
     <!-- Fin samaNavbar -->
 
     <!-- Debut samaHero -->
-    <div class="container my-5">
+    <div class="container my-5 samaContainer">
     <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
       <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
         <h1 class="display-4 fw-bold lh-1">Projet intermédiaire Bootcamp TIC (PHP) 2021</h1>
@@ -27,8 +27,8 @@
   </div>
     <!-- Fin samaHero -->
 
-    <!-- Debut samaNavbar -->
+    <!-- Debut Pied de page -->
      <?php include('composants/pied-de-page.php') ?>
-    <!-- Fin samaNavbar -->
+    <!-- Fin Pied de page -->
     
      
