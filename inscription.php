@@ -13,13 +13,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
    // On valide le nom
     if(empty(trim($_POST["nom"]))){
-        $nom_err = "Svp!!! veuillez entrer un nom valide.";     
+        $nom_err = "Svp!!! veuillez entrer un nom.";     
     } else{
         $nom = trim($_POST["nom"]);
     }
      // On valide le prenom
     if(empty(trim($_POST["prenom"]))){
-        $prenom_err = "Svp!!! veuillez entrer un prénom valide.";     
+        $prenom_err = "Svp!!! veuillez entrer un prénom.";     
     } else{
         $prenom = trim($_POST["prenom"]);
     }
@@ -89,45 +89,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $tel = trim($_POST["tel"]);
     }
     
-    // Vérifiez les erreurs d'entrée avant d'insérer dans la base de donnéesans la base de données
+    // On vérifie les erreurs d'entrée avant d'insérer dans la base de données
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
-        // Préparer une déclaration d'insertion
+        // On Prépare une déclaration d'insertion avec l'instruction INSERT
         $sql = "INSERT INTO utilisateurs (nom,prenom,username,email, password,tel) VALUES (:nom, :prenom, :username, :email, :password,:tel)";
          
-        if($stmt = $db->prepare($sql)){
+        if($req = $db->prepare($sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":nom", $param_nom, PDO::PARAM_STR);
-            $stmt->bindParam(":prenom", $param_prenom, PDO::PARAM_STR);
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
-            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
-            $stmt->bindParam(":tel", $param_tel, PDO::PARAM_STR);
+            $req->bindParam(":nom", $param_nom, PDO::PARAM_STR);
+            $req->bindParam(":prenom", $param_prenom, PDO::PARAM_STR);
+            $req->bindParam(":username", $param_username, PDO::PARAM_STR);
+            $req->bindParam(":email", $param_email, PDO::PARAM_STR);
+            $req->bindParam(":password", $param_password, PDO::PARAM_STR);
+            $req->bindParam(":tel", $param_tel, PDO::PARAM_STR);
             
             
-            // Set parameters
+            // On configure les paramétres
             $param_nom = $nom;
             $param_prenom = $prenom;
             $param_username = $username;
             $param_email = $email;
             $param_tel = $tel;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            // Ce paramétre crée l'encodage du mot de passe avec la fonction prédéfinie password_hash
+            $param_password = password_hash($password, PASSWORD_DEFAULT); 
             
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                // Redirect to login page
+            // On Tente d'exécuter la déclaration préparée
+            if($req->execute()){
+                // On peut faire une redirection par ici vers la page de connexion
+                // Comme on peut aussi faire une alerte 
                 $msg = '<div class=" alert alert-success"> Votre inscription a réussie avec succés ! </div>';
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Oups! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
             }
 
-            // Close statement
-            unset($stmt);
+            // On ferme la déclaration en le désarmant avec unset
+            unset($req);
         }
     }
     
-    // Close connection
-    unset($pdo);
+    // On ferme la connexion en le désarmant avec unset
+    unset($db);
 }
 ?>
 <?php include('composants/en-tête.php'); ?>
