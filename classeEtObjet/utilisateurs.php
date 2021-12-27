@@ -2,14 +2,27 @@
 include ('db/connexion.php');
 
 //On crée la classe des utilisateurs
-
 class Utilisateurs{
-    //Propriété de la base de donnée (attribut private afin de définir la propriété bdd en mode privée)
-    private $bdd;
+    
+    //La méthode de formatage de la Date
+    public function dateFormat($date){
+    //date_default_timezone_set ('Africa / Dakar'); 
+        $strtime = strtotime($date);
+        return date('Y-m-d H:i:s', $strtime);
+    }
 
-    //La méthode de construction de la base de donnée
-    public function __construct(){
-       $this->bdd = new BaseDeDonnee(); 
+    // La méthode pour effectuer une vérification si une adresse email existe ou pas
+    public function VerifEmail($email){
+        $sql = "SELECT email FROM utilisateurs WHERE email = :email";
+        $declaration = $this->bdd->pdo->prepare($sql);
+        $declaration->bindValue(':email', $email);
+        $declaration->execute();
+        if ($declaration->rowCount()> 0){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 }

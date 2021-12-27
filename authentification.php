@@ -1,7 +1,106 @@
-<?php include('composants/en-tête.php') ?>
+
+<?php
+	session_start();
+
+	//Vérifiez si l'utilisateur est déjà connecté, si oui on le redirige vers
+	// son espace de profil
+	if(isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true){
+		header("location: profil.php");
+		exit;
+	}
+
+	//On inclut le fichier de connexion
+	require_once "connexion.php";
+
+	//On doit définir les variables et initialiser avec des valeurs vides
+	$email = $password = "";
+	$email_er = $password_er = $login_er = "";
+
+	//Traitement des données du formulaire lors de la soumission du formulaire
+	if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+		//On vérifie si l'email est vide
+		// En utilisant trim() pour supprimer
+		// les espaces (ou d'autres caractères) en début et fin de chaîne
+		if(empty(trim($_POST["email"]))){
+			$email_er = "S\'il vous plaît entrer une adresse email valide !";
+		}
+		else{
+			$email = trim($_POST["email"]);
+		}
+
+		//On vérifie si le mot de passe est vide
+		if(empty(trim($_POST["password"]))){
+			$password_er = "S\'il vous plaît entrer un mot de passe valide !";
+		}
+		else{
+			$password = trim($_POST["password"]);
+		}
+
+		// On passe à la validation des identifiants
+		if(empty($email_er) && empty($password_er)){
+			// On prépare une requête sql avec l'instruction SELECT
+			$sql = "SELECT email,password FROM utilisateurs WHERE email = :email";
+
+			if($req = $db->prepare($sql)){
+			
+				// On fait la liaison des variables à l'instruction préparée en tant que paramétres
+				$req->bindParam(":email", $param_email, PDO::PARAM_STR);
+
+				// On configure les paramétres
+				$param_email = trim($_POST["email"]);
+
+				//on tente d'executer l'instruction préparée
+				if($req->execute()){
+					// On vérifie si l'email existe, si oui, 
+					// on vérifie le mot de passe
+					if($req->rowCount() == 1){
+						if($row = $req->fetch()){
+							$email = $row["email"];
+							$password_hash = $row["password"];
+							if(password_verify($password, $password_hash)){
+								//Si le mot de passe est correcte, on démarre la session
+								session_start();
+
+								//On stock les données dans la variable Session
+
+								$_SESSION["connecte"] = true;
+								$_SESSION["email"] = $email;
+
+								//On redirige l'utilisateur vers la page de profil
+
+								header("location: profil.php");
+							}else{
+								// Si le mot de passe n'est pas valide, on génére un message
+								$login_er = "Mot de passe ou adresse email invalide !";
+							}
+						}		
+					} else{
+						//Si l'adresse mail n'existe pas, on génére un message
+						$login_er = "Mot de passe ou adresse email invalide !";
+					}
+				} else{
+					echo "Réessayez svp, les identifiants ne correspondent pas !";
+				}
+				// On ferme la requête
+				unset($req);
+			}
+		}
+
+		// On ferme la connexion
+		unset($db);
+
+	}
+?>
+<?php include('composants/en-tête.php'); ?>
 	<div class="container-fluid samaContainer col-xxl-8 px-4 py-5">
 		<div class="row justify-content-center">
 			<div class="col-md-12 col-lg-10">
+			<?php 
+        if(!empty($login_er)){
+            echo '<div class="alert alert-danger">' . $login_er . '</div>';
+        	}        
+        	?>
 				<div class="wrap d-md-flex">
 					<div class="img" style="background-image: url(img/login.png);">
 					</div>
@@ -17,13 +116,17 @@
 									</p>
 								</div>
 							</div>
-						<form action="#" class="">
+						<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="post">
 							<div class="form-floating mb-3">
-								<input type="email" name="email" class="form-control"  id="floatingInput">
+								<input type="email" name="email" class="form-control <?php echo (!empty($email_er)) ? 'is-invalid' : ''; ?>"
+								 value="<?php echo $email; ?>"  id="floatingInput">
+								 <span class="invalid-feedback"><?php echo $email_er; ?></span>
 								<label class="floatingInput" for="email">Email</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="password" name="password" class="form-control"  id="floatingPassword">
+								<input type="password" name="password" class="form-control <?php echo (!empty($password_er)) ?
+								 'is-invalid' : ''; ?>"  id="floatingPassword">
+								 <span class="invalid-feedback"><?php echo $password_er; ?></span>
 								<label class="floatingInput" for="password">Mot de passe</label>
 							</div>
 							<div class="form-group">

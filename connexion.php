@@ -1,13 +1,13 @@
 <?php
     //on définit les variables de connexion
     $localhost = 'localhost';
-    $base = 'bootcamprojet'
+    $base = 'bootcamprojet';
     $utilisateur = 'root';
     $motdepasse = '';
 
     //On essaye d'établir  la connexion
     try {
-        $db = new PDO("mysql:host=$localhost;dbname=$base",$user,$password);
+        $db = new PDO("mysql:host=$localhost;dbname=$base",$utilisateur,$motdepasse);
 
         // définit le mode d'erreur PDO sur exception
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,5 +18,4 @@
     catch(PDOException $e){
         die ("<div class='alert alert-danger' role='alert'>"."Erreur de connection à la base de donnée... ". $e->getMessage()."</div>");
     }
-    $db = null;
 ?>

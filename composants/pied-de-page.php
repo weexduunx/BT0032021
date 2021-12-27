@@ -18,9 +18,9 @@
 </body>
  <!-- Javascript & Jquery -->
  <script src="js/bootstrap.bundle.js"></script>
- <script src="assets/jquery.dataTables.min.js"></script>
- <script src="assets/jquery.min.js"></script>
- <script src="assets/dataTables.bootstrap4.min.js"></script>
+ <script src="js/jquery.dataTables.min.js"></script>
+ <script src="js/jquery.min.js"></script>
+ <script src="js/dataTables.bootstrap4.min.js"></script>
  <script src="js/script.js"></script>
   <!-- Javascript & Jquery -->
 </html>
