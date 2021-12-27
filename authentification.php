@@ -13,8 +13,8 @@
 	require_once "connexion.php";
 
 	//On doit définir les variables et initialiser avec des valeurs vides
-	$email = $password = "";
-	$email_er = $password_er = $login_er = "";
+	$username = $email = $password = "";
+	$username_er = $email_er = $password_er = $login_er = "";
 
 	//Traitement des données du formulaire lors de la soumission du formulaire
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -36,14 +36,23 @@
 		else{
 			$password = trim($_POST["password"]);
 		}
+			// Je déclare ces variables pour stocker leurs informations au niveau de $_SESSION
+			// Ensuite je vais essayer de poser des conditions pour recupérer des messages
+			if(empty(trim($_POST["username"]))){
+				$username_er ="Veuillez saisir un nom d'utilisateur !";
+			}
+			else{
+				$username = trim($_POST["username"]);
+			}
+			
 
 		// On passe à la validation des identifiants
-		if(empty($email_er) && empty($password_er)){
+		if(empty($email_er) && empty($password_er) && empty($username_er)){
 			// On prépare une requête sql avec l'instruction SELECT
-			$sql = "SELECT email,password FROM utilisateurs WHERE email = :email";
+			$sql = "SELECT id,nom, prenom,username,email,password FROM utilisateurs WHERE email = :email";
 
 			if($req = $db->prepare($sql)){
-			
+				
 				// On fait la liaison des variables à l'instruction préparée en tant que paramétres
 				$req->bindParam(":email", $param_email, PDO::PARAM_STR);
 
@@ -56,6 +65,10 @@
 					// on vérifie le mot de passe
 					if($req->rowCount() == 1){
 						if($row = $req->fetch()){
+							$id = $row["id"];
+							$nom = $row["nom"];
+							$prenom = $row["prenom"];
+							$username = $row["username"];
 							$email = $row["email"];
 							$password_hash = $row["password"];
 							if(password_verify($password, $password_hash)){
@@ -65,6 +78,10 @@
 								//On stock les données dans la variable Session
 
 								$_SESSION["connecte"] = true;
+								$_SESSION["nom"] = $nom;
+								$_SESSION["id"] = $id;
+								$_SESSION["prenom"] = $prenom;
+								$_SESSION["username"] = $username;
 								$_SESSION["email"] = $email;
 
 								//On redirige l'utilisateur vers la page de profil
@@ -93,7 +110,7 @@
 	}
 ?>
 <?php include('composants/en-tête.php'); ?>
-	<div class="container-fluid samaContainer col-xxl-8 px-4 py-5">
+	<div class="container-fluid  col-xxl-8 px-4 py-5">
 		<div class="row justify-content-center">
 			<div class="col-md-12 col-lg-10">
 			<?php 
@@ -117,6 +134,13 @@
 								</div>
 							</div>
 						<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="post">
+
+							<div class="form-floating mb-3">
+								<input type="text" name="username" class="form-control <?php echo (!empty($username_er)) ? 'is-invalid' : ''; ?>"
+								 value="<?php echo $username; ?>"  id="floatingInput">
+								 <span class="invalid-feedback"><?php echo $username_er; ?></span>
+								<label class="floatingInput" for="username">Nom d'utilisateur</label>
+							</div>
 							<div class="form-floating mb-3">
 								<input type="email" name="email" class="form-control <?php echo (!empty($email_er)) ? 'is-invalid' : ''; ?>"
 								 value="<?php echo $email; ?>"  id="floatingInput">
@@ -134,7 +158,7 @@
 							</div>
 							<div class="form-floating d-md-flex">
 								<div class="w-50 ">
-									<a href="#">Mot de passe oublié</a>
+									<a href="reinitialiseMDP.php">Mot de passe oublié?</a>
 								</div>
 							</div>
 						</form>

@@ -9,8 +9,6 @@ $msg ="";
  
 // Traitement des données du formulaire lors de la soumission du formulaire
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-
    // On valide le nom
     if(empty(trim($_POST["nom"]))){
         $nom_err = "Svp!!! veuillez entrer un nom.";     
@@ -31,17 +29,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         // On prépare une requête sql avec l'instruction SELECT
         $sql = "SELECT id FROM utilisateurs WHERE username = :username";
-        
-        if($stmt = $db->prepare($sql)){
+        if($req = $db->prepare($sql)){
 				// On fait la liaison des variables à l'instruction préparée en tant que paramétres
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+            $req->bindParam(":username", $param_username, PDO::PARAM_STR);
             
             // On paramétre le nom d'utilisateur
             $param_username = trim($_POST["username"]);
             
             // On Tente d'exécuter la déclaration préparée
-            if($stmt->execute()){
-                if($stmt->rowCount() == 1){
+            if($req->execute()){
+                if($req->rowCount() == 1){
                     $username_err = "Ce nom d'utilisateur est déjà pris.";
                 } else{
                     $username = trim($_POST["username"]);
@@ -51,7 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
 
             // on ferme la déclaration préparée
-            unset($stmt);
+            unset($req);
         }
     }
 
@@ -118,7 +115,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($req->execute()){
                 // On peut faire une redirection par ici vers la page de connexion
                 // Comme on peut aussi faire une alerte 
-                $msg = '<div class=" alert alert-success"> Votre inscription a réussie avec succés ! </div>';
+                $msg = '<div class=" alert alert-success"><strong>Wooow Succés !!</strong> Inscription réussie 
+                <i class="fa fa-check" aria-hidden="true"></i> <a href="authentification.php">Connectez par ici</a></div>';
             } else{
                 echo "Oups! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
             }
@@ -134,71 +132,75 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 ?>
 <?php include('composants/en-tête.php'); ?>
 
-		<div class="container-fluid samaContainer col-xxl-8 px-4 py-5">
-			<div class="row justify-content-center">
-      
-				<div class="col-md-12 col-lg-10">
-        <?php echo $msg ?>
-					<div class="wrap d-md-flex">
-						<div class="img" style="background-image: url(img/Signup.png);">
-			      		</div>
-						<div class="login-wrap p-4 p-md-5">
-			      			<div class="d-flex">
-			      				<div class="w-100">
-			      					<h3 class="mb-4">Inscription</h3>
-			      				</div>
-								<div class="w-100">
-									<p class="social-media d-flex justify-content-end">
-										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-facebook"></span></a>
-										<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-twitter"></span></a>
-									</p>
-								</div>
-			      		</div>
-							<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="POST">
-                  <div class="form-floating mb-3">
-                    <input type="text" name="nom" class="form-control" id="floatingInput" >
-                    <span class="invalid-feedback"><?php echo $nom_err; ?></span>
-                    <label for="floatingInput">Nom</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="text" name="prenom" class="form-control" id="floatingInput">
-                    <span class="invalid-feedback"><?php echo $prenom_err; ?></span>
-                    <label for="floatingInput">Prénom</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
-                     value="<?php echo $username; ?>" id="floatingInput">
-                     <span class="invalid-feedback"><?php echo $username_err; ?></span>
-                    <label for="floatingInput">Nom d'utilisateur</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="email" name="email" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Email</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="text" name="tel" class="form-control" id="floatingInput">
-                    <label for="floatingInput">N° Téléphone</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" 
-                    value="<?php echo $password; ?>" id="floatingPassword">
-                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                    <input type="hidden" name="roleid" value="3" class="form-control">
-                    <label for="floatingPassword">Mot de passe</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
-                     value="<?php echo $confirm_password; ?>" id="floatingInput">
-                     <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
-                    <label for="floatingInput">Confirmez le Mot de Passe</label>
-                  </div>
-                  <button class="w-100 btn btn-lg btn-success" name="inscrire"  type="submit">S'inscrire</button>
-                  <hr class="my-4">
-		          </form>
-		          <!-- <p class="text-center">? <a data-toggle="tab" href="#signup">Sign Up</a></p> -->
-		        		</div>
-		      		</div>
-				</div>
-			</div>
-		</div>
+<div class="container-fluid col-xxl-8 px-4 py-5">
+    <div class="row justify-content-center">
+         <div class="col-md-12 col-lg-10">
+            <?php echo $msg ?>
+            <div class="wrap d-md-flex">
+                <div class="img" style="background-image: url(img/Signup.png);"></div>
+                <div class="login-wrap p-4 p-md-5">
+                    <div class="d-flex">
+                        <div class="w-100">
+                            <h3 class="mb-4">Inscription</h3>
+                        </div>
+                        <div class="w-100">
+                            <p class="social-media d-flex justify-content-end">
+                                <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-facebook"></span></a>
+                                <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fab fa-twitter"></span></a>
+                            </p>
+                        </div>
+                    </div>
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="POST">
+                        <div class="form-floating mb-3">
+                            <input type="text" name="nom" class="form-control" id="floatingInput"
+                            value="<?php echo $nom; ?>" >
+                            <span class="invalid-feedback"><?php echo $nom_err; ?></span>
+                            <label for="floatingInput">Nom</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="prenom" class="form-control" id="floatingInput"
+                            value="<?php echo $prenom; ?>">
+                            <span class="invalid-feedback"><?php echo $prenom_err; ?></span>
+                            <label for="floatingInput">Prénom</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
+                            value="<?php echo $username; ?>" id="floatingInput">
+                            <span class="invalid-feedback"><?php echo $username_err; ?></span>
+                            <label for="floatingInput">Nom d'utilisateur</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>"
+                            id="floatingInput" value="<?php echo $email; ?>">
+                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                            <label for="floatingInput">Email</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="tel" class="form-control <?php echo (!empty($tel_err)) ? 'is-invalid' : ''; ?>"
+                            id="floatingInput" value="<?php echo $tel; ?>">
+                            <span class="invalid-feedback"><?php echo $tel_err; ?></span>
+                            <label for="floatingInput">N° Téléphone</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" 
+                            value="<?php echo $password; ?>" id="floatingPassword">
+                            <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                            <input type="hidden" name="roleid" value="3" class="form-control">
+                            <label for="floatingPassword">Mot de passe</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
+                            value="<?php echo $confirm_password; ?>" id="floatingInput">
+                            <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
+                            <label for="floatingInput">Confirmez le Mot de Passe</label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-success" name="inscrire"  type="submit">S'inscrire</button>
+                        <hr class="my-4">
+                    </form>
+                    <p class="text-center">Si vous avez déjà un compte clicquez sur <a data-toggle="tab" href="authentification.php">Se connecter</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include('composants/pied-de-page.php'); ?>
