@@ -49,10 +49,10 @@
 		// On passe à la validation des identifiants
 		if(empty($email_er) && empty($password_er) && empty($username_er)){
 			// On prépare une requête sql avec l'instruction SELECT
-			$sql = "SELECT id,nom, prenom,username,email,password FROM utilisateurs WHERE email = :email";
+			$sql = "SELECT id,nom, prenom,username,email,password,tel FROM utilisateurs WHERE email = :email";
 
 			if($req = $db->prepare($sql)){
-				
+		
 				// On fait la liaison des variables à l'instruction préparée en tant que paramétres
 				$req->bindParam(":email", $param_email, PDO::PARAM_STR);
 
@@ -71,6 +71,7 @@
 							$username = $row["username"];
 							$email = $row["email"];
 							$password_hash = $row["password"];
+							$tel= $row["tel"];
 							if(password_verify($password, $password_hash)){
 								//Si le mot de passe est correcte, on démarre la session
 								session_start();
@@ -83,6 +84,7 @@
 								$_SESSION["prenom"] = $prenom;
 								$_SESSION["username"] = $username;
 								$_SESSION["email"] = $email;
+								$_SESSION["tel"] = $tel;
 
 								//On redirige l'utilisateur vers la page de profil
 

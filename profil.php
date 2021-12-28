@@ -7,8 +7,18 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
     header("location: authentification.php");
     exit;
 }
+//On stocke des informations sur les variables 
+$nom = $_SESSION["nom"];
+$prenom = $_SESSION["prenom"];
+$username = $_SESSION["username"];
+$email = $_SESSION["email"];
+$tel = $_SESSION["tel"];
 //On inclut le fichier de connexion
 require_once "connexion.php";
+
+
+
+
 ?>
 <?php include 'composants/entêteProfil.php'; ?>
     <div class="container my-5">
@@ -52,7 +62,7 @@ require_once "connexion.php";
                        
                         <hr class="my-4">
                         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                         <a href="modifprofil.php"><button type="button" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Mettre à jour</button></a>
+                         <a href=""><button type="submit" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Mettre à jour</button></a>
                          <a href="modifMDP.php"><button type="button" class="btn btn-outline-secondary btn-lg px-4">Modifier le mot de passe</button></a>
                         </div>
                     </form>
