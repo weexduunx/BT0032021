@@ -1,5 +1,5 @@
+
 <?php
-// Initialize the session
 session_start();
  
 // Check if the user is logged in, otherwise redirect to login page
@@ -7,19 +7,18 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
     header("location: authentification.php");
     exit;
 }
- 
-// Include config file
+// Inclure le fichier de connexion
 require_once "connexion.php";
  
-// Define variables and initialize with empty values
+// Définir les variables et initialiser avec des valeurs vides
 $new_password = $confirm_password = "";
 $new_password_err = $confirm_password_err = "";
 $msg = "";
  
-// Processing form data when form is submitted
+//  traitement de données de la formulaire lorsque la formulaire est soumise
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
-    // Validate new password
+    // Valider le nouveau mot de passe
     if(empty(trim($_POST["new_password"]))){
         $new_password_err = "Please enter the new password.";     
     } elseif(strlen(trim($_POST["new_password"])) < 6){
@@ -28,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $new_password = trim($_POST["new_password"]);
     }
     
-    // Validate confirm password
+    // Valider la confirmation du mot de passe
     if(empty(trim($_POST["confirm_password"]))){
         $confirm_password_err = "Please confirm the password.";
     } else{
@@ -38,38 +37,37 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
         
-    // Check input errors before updating the database
+    // Vérification des erreurs de saisie avant de mettre à jour la base de données
     if(empty($new_password_err) && empty($confirm_password_err)){
-        // Prepare an update statement
+        // On prépare une instruction de mise à jour
         $sql = "UPDATE utilisateurs SET password = :password WHERE username = :username";
         
         if($stmt = $db->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
+            // Lier les variables à l'instruction préparée sous forme de paramètres
             $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
             $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
             
-            // Set parameters
+            // Définir les paramètres
             $param_password = password_hash($new_password, PASSWORD_DEFAULT);
             $param_username = $_SESSION["username"];
             
-            // Attempt to execute the prepared statement
+            // Tentative d'exécution de la déclaration préparée
             if($stmt->execute()){
-                // Password updated successfully. Destroy the session, and redirect to login page
-               
+                //Mot de passe mis à jour avec succès, on détruit la session et on fait une redirection
                 session_destroy();
                 echo "Mot de passe modifié";
                 header("location: authentification.php");
                 exit();
             } else{
-                $msg = "Oops! Something went wrong. Please try again later.";
+                $msg = "Oops! Quelque chose a mal tourné..";
             }
 
-            // Close statement
+            // Fermeture de la déclaration
             unset($stmt);
         }
     }
     
-    // Close connection
+    // Fermeture de la connexion
     unset($db);
 }
 ?>
