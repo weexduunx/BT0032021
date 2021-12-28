@@ -7,18 +7,84 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
     header("location: authentification.php");
     exit;
 }
-//On stocke des informations sur les variables 
+//On inclut le fichier de connexion
+require_once "connexion.php";
+//On stocke des informations de SESSION dans les variables pour les recupérer aprés 
 $nom = $_SESSION["nom"];
 $prenom = $_SESSION["prenom"];
 $username = $_SESSION["username"];
 $email = $_SESSION["email"];
 $tel = $_SESSION["tel"];
-//On inclut le fichier de connexion
-require_once "connexion.php";
 
+// On initialise les nouvelles variables à mettre à jour
+$nvnom = $nvprenom = $nvusername = $nvemail = $nvtel = "";
+$nvnom_er = $nvprenom_er = $nvusername_er = $nvemail_er = $nvtel_er = "";
+$msg = "";
+   
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        // Valider le nom
+        if(empty(trim($_POST["nom"]))){
+            $nvnom_er = "Veuillez entrer le nouveau nom.";     
+        } else{
+            $nvnom = trim($_POST["nom"]);
+        }
 
+        //On valide le prenom
+        if(empty(trim($_POST["prenom"]))){
+            $nvprenom_er = "Veuillez entrer le nouveau prenom.";     
+        } else{
+            $nvprenom = trim($_POST["prenom"]);
+        }
 
+        //On valide le nom d'utilisateur
+        if(empty(trim($_POST["username"]))){
+            $nvusername_er = "Veuillez entrer le nouveau nom d'utilisateur.";     
+        } else{
+            $nvusername = trim($_POST["username"]);
+        }
 
+        //On valide l'adresse mail
+        if(empty(trim($_POST["email"]))){
+            $nvemail_er = "Veuillez entrer la nouvelle adresse mail.";     
+        } else{
+            $nvemail = trim($_POST["email"]);
+        }
+    
+        
+    // Vérification des erreurs de saisie avant de mettre à jour la base de données
+    if(empty($new_password_err) && empty($confirm_password_err)){
+        // On prépare une instruction de mise à jour
+        $sql = "UPDATE utilisateurs SET password = :password WHERE username = :username";
+        
+        if($stmt = $db->prepare($sql)){
+            // Lier les variables à l'instruction préparée sous forme de paramètres
+            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
+            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+            
+            // Définir les paramètres
+            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+            $param_username = $_SESSION["username"];
+            
+            // Tentative d'exécution de la déclaration préparée
+            if($stmt->execute()){
+                //Mot de passe mis à jour avec succès, on détruit la session et on fait une redirection
+                session_destroy();
+                echo "Mot de passe modifié";
+                header("location: authentification.php");
+                exit();
+            } else{
+                $msg = "Oops! Quelque chose a mal tourné..";
+            }
+
+            // Fermeture de la déclaration
+            unset($stmt);
+        }
+    }
+    
+    // Fermeture de la
+    unset($db);
+
+    }
 ?>
 <?php include 'composants/entêteProfil.php'; ?>
     <div class="container my-5">
