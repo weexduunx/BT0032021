@@ -94,6 +94,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <label for="floatingInput">New Password</label>
                         </div>
             
+            
                         <div class="form-floating mb-3">
                             <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
                             value="<?php echo $confirm_password; ?>" id="floatingInput">
