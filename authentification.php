@@ -87,7 +87,7 @@
 
 								//On redirige l'utilisateur vers la page de gestion
 
-								header("location: gestionUtilisateur.php");
+								echo '<script type="text/javascript"> window.open("gestionUtilisateur.php","_self");</script>';
 							}else{
 								// Si le mot de passe n'est pas valide, on génére un message
 								$login_er = "Mot de passe ou adresse email invalide !";
