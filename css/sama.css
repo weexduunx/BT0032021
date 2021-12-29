@@ -18,11 +18,13 @@ body{
     font: 14px sans-serif; 
 }
         
-.wrapper{ 
-    width: 360px; 
-    padding: 20px; 
+.wrapper{
+  width: 600px;
+  margin: 0 auto;
 }
-
+table tr td:last-child{
+  width: 120px;
+}
 
 :root {
     --blue: #007bff;

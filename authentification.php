@@ -1,11 +1,10 @@
-
 <?php
 	session_start();
 
 	//Vérifiez si l'utilisateur est déjà connecté, si oui on le redirige vers
 	// son espace de profil
 	if(isset($_SESSION["connecte"]) && $_SESSION["connecte"] === true){
-		header("location: profil.php");
+		header("location: authentification.php");
 		exit;
 	}
 
@@ -13,7 +12,7 @@
 	require_once "connexion.php";
 
 	//On doit définir les variables et initialiser avec des valeurs vides
-	$username = $email = $password = "";
+	$tel = $username = $email = $password = "";
 	$username_er = $email_er = $password_er = $login_er = "";
 
 	//Traitement des données du formulaire lors de la soumission du formulaire
@@ -49,10 +48,10 @@
 		// On passe à la validation des identifiants
 		if(empty($email_er) && empty($password_er) && empty($username_er)){
 			// On prépare une requête sql avec l'instruction SELECT
-			$sql = "SELECT id,nom, prenom,username,email,password FROM utilisateurs WHERE email = :email";
+			$sql = "SELECT id,nom, prenom,username,email,password,tel FROM utilisateurs WHERE email = :email";
 
 			if($req = $db->prepare($sql)){
-				
+		
 				// On fait la liaison des variables à l'instruction préparée en tant que paramétres
 				$req->bindParam(":email", $param_email, PDO::PARAM_STR);
 
@@ -71,6 +70,7 @@
 							$username = $row["username"];
 							$email = $row["email"];
 							$password_hash = $row["password"];
+							$tel= $row["tel"];
 							if(password_verify($password, $password_hash)){
 								//Si le mot de passe est correcte, on démarre la session
 								session_start();
@@ -83,10 +83,11 @@
 								$_SESSION["prenom"] = $prenom;
 								$_SESSION["username"] = $username;
 								$_SESSION["email"] = $email;
+								$_SESSION["tel"] = $tel;
 
-								//On redirige l'utilisateur vers la page de profil
+								//On redirige l'utilisateur vers la page de gestion
 
-								header("location: profil.php");
+								header("location: gestionUtilisateur.php");
 							}else{
 								// Si le mot de passe n'est pas valide, on génére un message
 								$login_er = "Mot de passe ou adresse email invalide !";
