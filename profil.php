@@ -43,7 +43,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             }
             
         } else{
-            echo "Oops! Something went wrong. Please try again later.";
+            echo "Oups!Quelque chose s'est mal passé.Veuillez réessayer plus tard.";
         }
     }
      
@@ -54,7 +54,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     unset($db);
 } else{
     // L'URL ne contient pas de paramètre ID.Rediriger la page d'erreur
-    header("location: error.php");
+    header("location: erreur.php");
     exit();
 }
 

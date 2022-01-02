@@ -22,7 +22,7 @@
 		// En utilisant trim() pour supprimer
 		// les espaces (ou d'autres caractères) en début et fin de chaîne
 		if(empty(trim($_POST["email"]))){
-			$email_er = "S\'il vous plaît entrer une adresse email valide !";
+			$email_er = "S'il vous plaît entrer une adresse email valide !";
 		}
 		else{
 			$email = trim($_POST["email"]);
@@ -30,7 +30,7 @@
 
 		//On vérifie si le mot de passe est vide
 		if(empty(trim($_POST["password"]))){
-			$password_er = "S\'il vous plaît entrer un mot de passe valide !";
+			$password_er = "S'il vous plaît entrer un mot de passe valide !";
 		}
 		else{
 			$password = trim($_POST["password"]);
@@ -90,12 +90,16 @@
 								echo '<script type="text/javascript"> window.open("gestionUtilisateur.php","_self");</script>';
 							}else{
 								// Si le mot de passe n'est pas valide, on génére un message
-								$login_er = "Mot de passe ou adresse email invalide !";
+								$login_er = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<strong>Succés !</strong> Oops, Mot de passe ou adresse email invalide !</div>';
 							}
 						}		
 					} else{
 						//Si l'adresse mail n'existe pas, on génére un message
-						$login_er = "Mot de passe ou adresse email invalide !";
+						$login_er = '<div class="alert alert-danger alert-dismissible mt-3" id="flash-msg">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Succés !</strong> Oops, Mot de passe ou adresse email invalide !</div>';
 					}
 				} else{
 					echo "Réessayez svp, les identifiants ne correspondent pas !";
@@ -163,7 +167,6 @@
 								</div>
 							</div>
 						</form>
-							<!-- <p class="text-center">? <a data-toggle="tab" href="#signup">Sign Up</a></p> -->
 					</div>
 				</div>
 			</div>

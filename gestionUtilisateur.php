@@ -7,10 +7,12 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
     header("location: authentification.php");
     exit;
 }
-
+$alert = "Tu veux vraiment le supprimer ? ";
 ?>
 <?php include 'composants/entêteProfil.php'; ?>
     <div class="container my-5">
+    <?php echo $msg; ?>
+
         <div class="row  pt-lg-5  rounded-3 border shadow-lg">
                  <h2 class="">Salut,  
                 <?php echo htmlspecialchars($_SESSION["prenom"]); ?> <b><?php  echo htmlspecialchars($_SESSION["nom"]); ?></b>
@@ -21,7 +23,7 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
                         <div class="row ">
                             <div class="col-md-12">
                                 <div class="mt-5 mb-3 clearfix">
-                                    <a href="create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Ajouter un utilisateur</a>
+                                    <a href="ajouter.php" onclick="return confirm('Tu veux vraiment ajouter un utilisateur ?')" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Ajouter un utilisateur</a>
                                 </div>
                                 <?php
                                 ///On inclut le fichier de connexion
@@ -32,7 +34,7 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
                                 if($result = $db->query($sql)){
                                     if($result->rowCount() > 0){
                                        echo '<h2 class="text-center">Détails des utilisateurs</h2>';
-                                        echo '<div class="table-responsive"> <table class="table table-bordered table-striped table-sm">';
+                                        echo '<div class="table-responsive"> <table id="table"class="table table-bordered table-striped ">';
                                             echo "<thead>";
                                                 echo "<tr>";
                                                     echo '<th scope="col">#</th>';
@@ -55,8 +57,8 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
                                                     echo "<td>" . $row['tel'] . "</td>";
                                                     echo "<td>";
                                                         echo '<a href="profil.php?id='. $row['id'] .'" class="mr-3" title="Afficher" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
-                                                        echo '<a href="maj.php?id='. $row['id'] .'" class="mr-3" title="Modifier" data-toggle="tooltip"><span class="fas fa-pencil-alt"></span></a>';
-                                                        echo '<a href="supprimer.php?id='. $row['id'] .'" title="Supprimer" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
+                                                        echo '<a href="maj.php?id='. $row['id'] .'" class=" mr-3" title="Modifier" data-toggle="tooltip"><span class="fas fa-pencil-alt  "></span></a>';
+                                                        echo '<a href="supprimer.php?id='. $row['id'] .'"   title="Supprimer" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
                                                     echo "</td>";
                                                 echo "</tr>";
                                             }

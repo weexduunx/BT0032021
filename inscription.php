@@ -115,7 +115,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($req->execute()){
                 // On peut faire une redirection par ici vers la page de connexion
                 // Comme on peut aussi faire une alerte 
-                $msg = '<div class=" alert alert-success"><strong>Wooow Succés !!</strong> Inscription réussie 
+                $msg = '<div class=" alert alert-success alert-dismissible mt-3" id="flash-msg"><strong>Wooow Succés !!</strong> Inscription réussie 
                 <i class="fa fa-check" aria-hidden="true"></i> <a href="authentification.php">Connectez par ici</a></div>';
             } else{
                 echo "Oups! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
