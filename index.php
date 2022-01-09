@@ -28,7 +28,7 @@
     <!-- Fin samaHero -->
 
     <!-- Debut Pied de page -->
-     <?php include('composants/pied-de-page.php') ?>
+      <?php include('composants/pied-de-page.php') ?>
     <!-- Fin Pied de page -->
     
      
