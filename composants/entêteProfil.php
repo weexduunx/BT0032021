@@ -18,7 +18,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <!-- <i class="fas fa-home"></i> -->
-          <span>&#10092;/&#10093;</span>SunuCodeSN </a>
+          <span>&#10092;/&#10093;</span>SunuCodeSN</a>
         </a>
         <button class="navbar-toggler collapsed text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon "></span>
@@ -35,6 +35,7 @@
               
             <div class="d-flex">
                 <div class="barreDeRecherche">
+                  
                     <input class="inputRecherche" type="text" name="" placeholder="Rechercher...">
                     <a href="#" class="iconeDeRecherche"><i class="fa fa-search"></i></a>
                  </div>

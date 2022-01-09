@@ -12,8 +12,8 @@
 	require_once "connexion.php";
 
 	//On doit définir les variables et initialiser avec des valeurs vides
-	$tel = $username = $email = $password = "";
-	$username_er = $email_er = $password_er = $login_er = "";
+	$tel  = $email = $password = "";
+	$email_er = $password_er = $login_er = "";
 
 	//Traitement des données du formulaire lors de la soumission du formulaire
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -35,18 +35,9 @@
 		else{
 			$password = trim($_POST["password"]);
 		}
-			// Je déclare ces variables pour stocker leurs informations au niveau de $_SESSION
-			// Ensuite je vais essayer de poser des conditions pour recupérer des messages
-			if(empty(trim($_POST["username"]))){
-				$username_er ="Veuillez saisir un nom d'utilisateur !";
-			}
-			else{
-				$username = trim($_POST["username"]);
-			}
-			
 
 		// On passe à la validation des identifiants
-		if(empty($email_er) && empty($password_er) && empty($username_er)){
+		if(empty($email_er) && empty($password_er)){
 			// On prépare une requête sql avec l'instruction SELECT
 			$sql = "SELECT id,nom, prenom,username,email,password,tel FROM utilisateurs WHERE email = :email";
 
@@ -140,12 +131,6 @@
 							</div>
 						<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="post">
 
-							<div class="form-floating mb-3">
-								<input type="text" name="username" class="form-control <?php echo (!empty($username_er)) ? 'is-invalid' : ''; ?>"
-								 value="<?php echo $username; ?>"  id="floatingInput">
-								 <span class="invalid-feedback"><?php echo $username_er; ?></span>
-								<label class="floatingInput" for="username">Nom d'utilisateur</label>
-							</div>
 							<div class="form-floating mb-3">
 								<input type="email" name="email" class="form-control <?php echo (!empty($email_er)) ? 'is-invalid' : ''; ?>"
 								 value="<?php echo $email; ?>"  id="floatingInput">

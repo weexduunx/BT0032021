@@ -7,8 +7,8 @@ if(!isset($_SESSION["connecte"]) || $_SESSION["connecte"] !== true){
 }
 require_once "connexion.php";
  
-$nom = $prenom = $email = $tel = $username = "";
-$nom_er = $prenom_er = $email_er = $username_er = $tel_er = "";
+$nom = $prenom = $email = $tel = $username = $role = "";
+$nom_er = $prenom_er = $email_er = $username_er = $tel_er = $role_er = "";
 $msg = "";
 $password = $confirm_password = "";
 $password_err = $confirm_password_err = "";
@@ -51,6 +51,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $tel = $input_tel;
     }
 
+    $input_role = trim($_POST["roleid"]);
+    if(empty($input_role)){
+        $role_er = "Svp! saisissez un numéro de téléphone.";     
+    }  else{
+        $role = $input_role;
+    }
      // On valide le mot de passe
      if(empty(trim($_POST["password"]))){
         $password_err = "Veuillez entrer un mot de passe.";     
@@ -73,8 +79,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     if(empty($nom_er) && empty($prenom_er) && empty($email_er) && empty($username_er) && empty($password_err) && empty($confirm_password_err) && empty($tel_er)){
 
-        $sql = "INSERT INTO utilisateurs (nom, prenom, username, email,password, tel) 
-        VALUES (:nom, :prenom, :username, :email, :password, :tel)";
+        $sql = "INSERT INTO utilisateurs (nom, prenom, username, email,password, tel, roleid) 
+        VALUES (:nom, :prenom, :username, :email, :password, :tel, :roleid)";
  
         if($stmt = $db->prepare($sql)){
             $stmt->bindParam(":nom", $param_nom);
@@ -83,6 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt->bindParam(":email", $param_email);
             $stmt->bindParam(":password", $param_password);
             $stmt->bindParam(":tel", $param_tel);
+            $stmt->bindParam(":roleid", $param_role);
             
             $param_nom = $nom;
             $param_prenom = $prenom;
@@ -90,6 +97,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_email = $email;
             $param_password = password_hash($password, PASSWORD_DEFAULT); 
             $param_tel = $tel;
+            $param_role = $role;
             
             if($stmt->execute()){
                 header("location: gestionUtilisateur.php");

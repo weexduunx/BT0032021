@@ -3,8 +3,8 @@
 require_once "connexion.php";
  
 //On doit définir les variables et les initialiser avec des valeurs vides
-$nom = $prenom = $email = $tel = $username = $password = $confirm_password = "";
-$nom_err = $prenom_err = $email_err = $tel_err =$username_err = $password_err = $confirm_password_err = "";
+$nom = $prenom = $email = $tel = $username = $password = $confirm_password = $roleid ="";
+$nom_err = $prenom_err = $email_err = $tel_err =$username_err = $password_err = $confirm_password_err = $roleid_er = "";
 $msg ="";
  
 // Traitement des données du formulaire lors de la soumission du formulaire
@@ -80,17 +80,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
      // On valide le numéro de téléphone
-    if(empty(trim($_POST["tel"]))){
-        $tel_err = "Veuillez entrer un numéro de téléphone";     
-    } else{
-        $tel = trim($_POST["tel"]);
+     $input_tel = trim($_POST["tel"]);
+    if(empty($input_tel)){
+        $tel_err = "Svp! saisissez un numéro de téléphone.";     
+    }
+    elseif (filter_var($input_tel,FILTER_VALIDATE_INT) == false) {
+        $tel_err = "Entrez uniquement des caractères numériques pour le champ Numéro de Téléphone !";
+    }  else{
+        $tel = $input_tel;
+    }
+
+
+    if(empty(trim($_POST["roleid"]))){
+        $roleid_er = "";
+    }else {
+        $roleid = trim($_POST["roleid"]);
     }
     
+    
     // On vérifie les erreurs d'entrée avant d'insérer dans la base de données
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
+    if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($tel_err)){
         
         // On Prépare une déclaration d'insertion avec l'instruction INSERT
-        $sql = "INSERT INTO utilisateurs (nom,prenom,username,email, password,tel) VALUES (:nom, :prenom, :username, :email, :password,:tel)";
+        $sql = "INSERT INTO utilisateurs (nom,prenom,username,email, password,tel, roleid)
+         VALUES (:nom, :prenom, :username, :email, :password,:tel, :roleid)";
          
         if($req = $db->prepare($sql)){
             // Bind variables to the prepared statement as parameters
@@ -99,7 +112,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $req->bindParam(":username", $param_username, PDO::PARAM_STR);
             $req->bindParam(":email", $param_email, PDO::PARAM_STR);
             $req->bindParam(":password", $param_password, PDO::PARAM_STR);
-            $req->bindParam(":tel", $param_tel, PDO::PARAM_STR);
+            $req->bindParam(":tel", $param_tel,PDO::PARAM_INT);
+            $req->bindParam(":roleid", $param_role,PDO::PARAM_STR);
             
             
             // On configure les paramétres
@@ -108,6 +122,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_username = $username;
             $param_email = $email;
             $param_tel = $tel;
+            $param_role = $roleid;
             // Ce paramétre crée l'encodage du mot de passe avec la fonction prédéfinie password_hash
             $param_password = password_hash($password, PASSWORD_DEFAULT); 
             
@@ -115,8 +130,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($req->execute()){
                 // On peut faire une redirection par ici vers la page de connexion
                 // Comme on peut aussi faire une alerte 
+                header( "refresh:2; url=authentification.php" );
                 $msg = '<div class=" alert alert-success alert-dismissible mt-3" id="flash-msg"><strong>Wooow Succés !!</strong> Inscription réussie 
                 <i class="fa fa-check" aria-hidden="true"></i> <a href="authentification.php">Connectez par ici</a></div>';
+
             } else{
                 echo "Oups! Quelque chose s'est mal passé. Veuillez réessayer plus tard.";
             }
@@ -152,47 +169,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="" method="POST">
                         <div class="form-floating mb-3">
-                            <input type="text" name="nom" class="form-control" id="floatingInput"
-                            value="<?php echo $nom; ?>" >
+                            <input type="text" name="nom" class="form-control" id="floatingInput" >
                             <span class="invalid-feedback"><?php echo $nom_err; ?></span>
                             <label for="floatingInput">Nom</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="prenom" class="form-control" id="floatingInput"
-                            value="<?php echo $prenom; ?>">
+                            <input type="text" name="prenom" class="form-control" id="floatingInput">
                             <span class="invalid-feedback"><?php echo $prenom_err; ?></span>
                             <label for="floatingInput">Prénom</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
-                            value="<?php echo $username; ?>" id="floatingInput">
+                            id="floatingInput">
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                             <label for="floatingInput">Nom d'utilisateur</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>"
-                            id="floatingInput" value="<?php echo $email; ?>">
+                            id="floatingInput" >
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
                             <label for="floatingInput">Email</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="tel" class="form-control <?php echo (!empty($tel_err)) ? 'is-invalid' : ''; ?>"
-                            id="floatingInput" value="<?php echo $tel; ?>">
+                            id="floatingInput" pattern="[0-9]{9}"  maxlength="14" >
                             <span class="invalid-feedback"><?php echo $tel_err; ?></span>
                             <label for="floatingInput">N° Téléphone</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" 
-                            value="<?php echo $password; ?>" id="floatingPassword">
+                            id="floatingPassword">
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                            <input type="hidden" name="roleid" value="3" class="form-control">
                             <label for="floatingPassword">Mot de passe</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
-                            value="<?php echo $confirm_password; ?>" id="floatingInput">
+                             id="floatingInput">
                             <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                             <label for="floatingInput">Confirmez le Mot de Passe</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="hidden" name="roleid" value="3" class="form-control">
                         </div>
                         <button class="w-100 btn btn-lg btn-success" name="inscrire"  type="submit">S'inscrire</button>
                         <hr class="my-4">

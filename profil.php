@@ -99,8 +99,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         </a>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                     <a href="gestionUtilisateur.php"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Retour</button></a> 
-                     <a href="modifMDP.php"><button type="button" class="btn btn-secondary btn-lg px-4 me-md-2 fw-bold"> Modifier le Mot de passe</button></a> 
+                     <a href="gestionUtilisateur.php"><button type="button" class="btn btn-primary ">Retour</button></a> 
+                     <a href="modifMDP.php"><button type="button" class="btn btn-secondary "> Modifier le Mot de passe</button></a> 
                     </div>
                 </div>
             <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
