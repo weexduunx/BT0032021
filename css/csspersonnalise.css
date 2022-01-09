@@ -1,0 +1,51 @@
+.barreDeRecherche{
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 40px;
+    background-color: white;
+    border-radius: 40px;
+    padding: 10px;
+    }
+
+.inputRecherche{
+    color: black;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0;
+    caret-color:transparent;
+    line-height: 20px;
+    transition: width 0.5s linear;
+   
+}
+
+.barreDeRecherche:hover > .inputRecherche{
+    padding: 0 10px;
+    width: 250px;
+    caret-color:#2073f7;
+    transition: width 0.5s linear;
+    
+}
+
+.barreDeRecherche:hover > .iconeDeRecherche{
+    /* background: white; */
+    color: #2073f7;
+}
+    
+.iconeDeRecherche{
+    height: 40px;
+    width: 40px;
+    float: right;
+    padding-bottom: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    /* color:white; */
+    text-decoration:none;
+}
+
+.samaIcone{
+    height: 40px;
+    width: 40px;
+}

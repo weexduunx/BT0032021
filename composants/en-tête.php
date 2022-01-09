@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SunuCodeSN | Bootcamp PSEJ</title>
     <link rel="stylesheet" href="css/sama.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -15,9 +15,11 @@
 <nav class="navbar navbar-expand-lg  navbar-dark bg-primary ">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-          <i class="fas fa-home"></i>
-        </a>
-        <button class="navbar-toggler collapsed text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+          <!-- <i class="fas fa-home"></i> -->
+          <span>&#10092;/&#10093;</span>SunuCodeSN </a>
+        <button class="navbar-toggler collapsed text-light" type="button" data-bs-toggle="collapse" 
+        data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" 
+        aria-label="Toggle navigation">
           <span class="navbar-toggler-icon "></span>
         </button>
         <div class="navbar-collapse collapse" id="navbarSupportedContent2" style="">
