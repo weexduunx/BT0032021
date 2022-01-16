@@ -153,7 +153,7 @@
 									<ul class="show-notification profile-notification">
 									
 										<li class="waves-effect waves-light">
-											<a href="user-profile.html">
+											<a href="#">
 												<i class="ti-user"></i> Profil
 											</a>
 										</li>
