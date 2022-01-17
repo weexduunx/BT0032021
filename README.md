@@ -17,7 +17,7 @@ L'application a été conçue par Aminata Wade et Idrissa Ndiouck avec les techn
  -           HTML5
  -           CSS3
  -           FRAMEWORK BOOTSTRAP
- -           JAVASCRIPT
+ -           JAVASCRIPT (JQUERY & AJAX)
  -           PHP
  -           MYSQL   
  
